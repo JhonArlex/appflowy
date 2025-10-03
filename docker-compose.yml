@@ -16,6 +16,8 @@ services:
     depends_on:
       appflowy_cloud:
         condition: service_healthy
+      appflowy_web:
+        condition: service_healthy
       gotrue:
         condition: service_healthy
       minio:
@@ -256,6 +258,12 @@ services:
   appflowy_web:
     restart: always
     image: appflowyinc/appflowy_web:${APPFLOWY_WEB_VERSION:-latest}
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:80"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
     depends_on:
       appflowy_cloud:
         condition: service_healthy
