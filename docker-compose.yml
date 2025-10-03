@@ -15,6 +15,18 @@ services:
         condition: service_healthy
       appflowy_web:
         condition: service_healthy
+    labels:
+      - traefik.docker.network=dokploy-network
+      - traefik.http.routers.monitoring-appflowy-b3yaiv-32-web.rule=Host(`appflowy.nyssa.com.co`)
+      - traefik.http.routers.monitoring-appflowy-b3yaiv-32-web.entrypoints=web
+      - traefik.http.services.monitoring-appflowy-b3yaiv-32-web.loadbalancer.server.port=80
+      - traefik.http.routers.monitoring-appflowy-b3yaiv-32-web.service=monitoring-appflowy-b3yaiv-32-web
+      - traefik.http.routers.monitoring-appflowy-b3yaiv-32-web.middlewares=redirect-to-https@file
+      - traefik.http.routers.monitoring-appflowy-b3yaiv-32-websecure.rule=Host(`appflowy.nyssa.com.co`)
+      - traefik.http.routers.monitoring-appflowy-b3yaiv-32-websecure.entrypoints=websecure
+      - traefik.http.services.monitoring-appflowy-b3yaiv-32-websecure.loadbalancer.server.port=80
+      - traefik.http.routers.monitoring-appflowy-b3yaiv-32-websecure.service=monitoring-appflowy-b3yaiv-32-websecure
+      - traefik.http.routers.monitoring-appflowy-b3yaiv-32-websecure.tls.certresolver=letsencrypt
 
   # You do not need this if you have configured to use your own s3 file storage
   minio:
